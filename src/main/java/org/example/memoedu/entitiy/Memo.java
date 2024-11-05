@@ -23,6 +23,10 @@ public class Memo {
         this.title=dto.getTitle();
     }
 
+    public void updateContent(MemoRequestDto dto) {
+        this.content = dto.getContent();
+    }
+
 
 
 }

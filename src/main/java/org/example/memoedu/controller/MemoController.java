@@ -18,6 +18,7 @@ public class MemoController {
     private final Map<Long, Memo> memoList = new HashMap<>();
 
     //PostMapping
+
     @PostMapping
     //Status Code Create
     public ResponseEntity<MemoResponseDto> createMemo(@RequestBody MemoRequestDto dto) {
@@ -56,7 +57,6 @@ public class MemoController {
     //단건 조회 기능
     @GetMapping("/{id}")
     public ResponseEntity<MemoResponseDto> findMemoById(@PathVariable Long id) {
-
 
         Memo memo = memoList.get(id);
 
@@ -103,16 +103,25 @@ public class MemoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if(dto.getTitle() == null || dto.getContent() != null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if(dto.getContent() != null) {
+            memo.updateContent(dto);
         }
 
-        memo.updateTitle(dto);
+        if(dto.getTitle() != null) {
+            memo.updateTitle(dto);
+        }
+
+        if(dto.getTitle() != null && dto.getContent() != null) {
+            memo.updateTitle(dto);
+            memo.updateContent(dto);
+        }
+
 
         return new ResponseEntity<>(new MemoResponseDto(memo), HttpStatus.OK);
 
     }
 
+    //식별자 유, 무에 따른 결과값 반환
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMemo(@PathVariable Long id) {
 
@@ -123,7 +132,5 @@ public class MemoController {
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-
 
 }
